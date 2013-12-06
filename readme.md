@@ -1,7 +1,7 @@
 ![FGx Logo]( http://fgx.github.io/fgx-cap-40x30.png) FGx Aircraft Overview Read Me
 ================================================================================
 
-[FGx Aircraft Viewer] ( http://fgx.github.io/fgx-aircraft/aircraft-viewer/r2/aircraft-viewer.html )
+[FGx Aircraft Viewer]( http://fgx.github.io/fgx-aircraft/aircraft-viewer/r2/aircraft-viewer.html )
 
 ## Road Map
 
