@@ -1,7 +1,7 @@
 ![FGx Logo]( http://fgx.github.io/fgx-cap-40x30.png) FGx Aircraft Overview Read Me
 ================================================================================
 
-[FGx Aircraft Viewer]( http://fgx.github.io/fgx-aircraft/aircraft-viewer/r2/aircraft-viewer.html )
+[FGx Aircraft Overview R3]( http://fgx.github.io/fgx-aircraft-overview/r3/aircraft-overview.html )
 
 ## Road Map
 
@@ -18,4 +18,5 @@ copyright &copy; 2013 FGx authors ~ All work herein is under the [GPL 2.0 Licens
 
 ## Change Log
 
+2013-12-05 ~ Theo
 * Moved to new repo and renamed: FGx Aircraft Overview
