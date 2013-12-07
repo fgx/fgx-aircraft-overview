@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang=en>
+<head>
+<title>FGx Aircraft Overview Splash R4</title>
+<meta charset=utf-8>
+</head>
+<body>
+<script>
+
+	document.body.style.cssText = ' font: bold 12pt monospace; ';
+	
+	var info = document.body.appendChild( document.createElement( 'div' ) );
+	info.innerHTML = '<h1 style=display:inline; ><a href="http://fgx.github.io">FGx</a> &raquo; Aircraft Overview R4 ~ Splash Images </h1>' +
+		'<a href=aircraft-overview.html >FGx Aircraft Overview</a>' + 
+	'';
+	
+	var list = document.body.appendChild( document.createElement( 'div' ) );
+	list.style.cssText = 'height: ' + (window.innerHeight - 60) + 'px; width: 100%; overflow: scroll;';
+	
+	var text = requestFile( '../../fgx-aircraft/splash.txt' );
+	var lines = text.split(/\r\n|\n/);
+	var length = lines.length - 1;
+	var data = [];
+	var sep = '/';
+	
+	var pre = '<table>';
+	var rows = '';
+	var post = '</table>';
+	for ( var i = 0; i < length; i++ ) {
+		data.push( lines[i].split( sep ) );
+		
+		if ( data[i].length === 2 ) {
+			rows += '<tr>' +
+			'<td>Folder: ' + data[i][0] + '</td>' +
+			'<td><img src="../../fgx-aircraft/data/' + data[i][0] + '/' + data[i][1] + '" ></td>' +
+			'</tr>'; 
+		} else {
+			rows += '<tr>' +
+			'<td>Folder: ' + data[i][0] + '</td>' +
+			'<td><img src="../../fgx-aircraft/data/' + data[i][0] + '/' + data[i][1] + '/' + data[i][2] + '" ></td>' +
+			'</tr>'; 
+		}
+	}
+	
+	list.innerHTML = pre + rows + post;
+	
+	function requestFile( fname ) {
+		// var xmlHttp = null;
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( 'GET', fname, false );
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+
+</script>
+</body>
+</html>
