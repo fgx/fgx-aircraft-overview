@@ -1,10 +1,10 @@
 ![FGx Logo]( http://fgx.github.io/images/fgx-cap-40x30.png) FGx Aircraft Overview Read Me
 =========================================================================================
 
-[FGx Aircraft Overview R4]( http://fgx.github.io/fgx-aircraft-overview/r4/aircraft-overview.html )
+[FGx Aircraft Overview (latest)]( http://fgx.github.io/fgx-aircraft-overview/latest/index.html )
 
 Cropped `iframe` view of the FGx Aircraft Loader app:		
-<iframe src="r4/aircraft-overview.html" width=100% height=300px>
+<iframe src="latest/index.html" width=100% height=300px>
 There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io.
 </iframe>
 
