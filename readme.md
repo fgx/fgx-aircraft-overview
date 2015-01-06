@@ -46,9 +46,20 @@ Right Panel: Viewing panel with ability to zoom, pan and rotate aircraft. Link t
 
 
 ## Copyright and License
-copyright &copy; 2013 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
+copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
 
 ## Change Log
+
+2015-01-05 ~ Theo
+
+* Added axis indicator
+* simplified lights
+* added reload link to title
+* code cleanup
+* Update copyrights
+* Add latest folder and file
+
+
 
 2013-12-18 ~ Theo
 

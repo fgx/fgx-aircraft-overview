@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang=en>
+<head>
+<title>FGx Aircraft Overview R5</title>
+<meta charset=utf-8>
+<meta name=viewport content=width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0>
+</head>
+<body>
+
+<script src='http://mrdoob.github.io/three.js/examples/js/Detector.js'></script>
+<script src='http://mrdoob.github.io/three.js/build/three.min.js'></script>
+<script src='http://mrdoob.github.io/three.js/examples/js/controls/OrbitControls.js'></script>
+<script src='http://mrdoob.github.io/three.js/examples/js/libs/stats.min.js'></script>
+
+<script>
+	if ( ! Detector.webgl ) { Detector.addGetWebGLMessage(); }
+
+	var renderer, scene, camera, controls, stats;
+	var aircrafts, aircraft, data, index, bbox;
+	var light, geometry, material, mesh, info;
+
+	init();
+	animate();
+
+	function init() {
+		if ( ! Detector.webgl ) {
+			renderer = new THREE.CanvasRenderer();
+		} else {
+			renderer = new THREE.WebGLRenderer( { alpha: 1, antialias: true, clearColor: 0xffffff } );
+		}
+
+		document.body.style.cssText = ' font: bold 12pt monospace; margin: 0; overflow: hidden';
+
+		menuLeft = document.body.appendChild( document.createElement( 'div' ) );
+		menuLeft.style.cssText = 'background-color: #ccc; left: 20px; max-height: ' + ( window.innerHeight - 120 ) + 'px ;' +
+			'opacity: 0.9; overflow: auto; padding: 10px; position: absolute; resize: both; top: 20px; width: 220px; z-index: 20;' +
+		'';
+//		menuLeft.id = 'movable';
+//		menuLeft.title = 'Move this menu panel around the screen or iconize it';
+//		menuLeft.addEventListener( 'mousedown', VH.mouseMove, false );
+		menuLeft.header = 
+//			'<h1><a id=closerIcon href=JavaScript:VH.toggleMenu(menuLeft); >&#9776;</a></h1>' +
+		'';
+
+		menuLeft.header += '<h1><a href="http://fgx.github.io">FGx</a> &raquo;<br>' +
+			'<a href="" >Aircraft<br>Overview</a><br>' +
+			'<a href=# onclick=toggleInfo() style=text-decoration:none; ><large>&#x24D8;</large></a></h1>' +
+			'<p><a href=aircraft-overview-splash.html >Splash Images</a></p>' +
+			'<p><input type=checkbox id=inpBBox checked />Display bounding box</p>' +
+			'<span id=msg></span>' +
+			'<p><input type=button onclick=exportAircraft() value="Export aircraft" /> ~ ' +
+			'<input type=file onchange=openFileByFileDialog(this) /></p>' +
+		'';
+
+//		var list = document.body.appendChild( document.createElement( 'div' ) );
+//		list.style.cssText = 'height: ' + (window.innerHeight - 60) + 'px; width: 600px; overflow: scroll;'
+
+		var response = requestFile( '../../fgx-aircraft/aircraft.txt' );
+		var lines = response.split(/\r\n|\n/);
+		var length = lines.length - 1;
+		data = [];
+		var rows = '';
+
+		for ( var i = 0; i < length; i++ ) {
+			data.push( lines[i].split( '/' ) );
+			rows += '<p>' +
+			'<a href=# onclick="loadAircraft(' + i + ');" ><img src="../../fgx-aircraft/data/' + data[i][0] + '/thumbnail.jpg" width=171></a><p>' +
+			'Folder: ' + data[i][0] + '<br>File: <a href=# onclick="loadAircraft(' + i + ');" >' + data[i][1] + '</a>' +
+
+			'</p>';
+		}
+
+		menuLeft.innerHTML = menuLeft.header + rows;
+
+		stats = new Stats();
+		stats.domElement.style.cssText = 'position: absolute; right: 0; top: 0px; zIndex: 100; ';
+		document.body.appendChild( stats.domElement );
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.shadowMapEnabled = true;
+		document.body.appendChild( renderer.domElement );
+//		renderer.domElement.style.cssText = ' border: 1px #aaa solid; left: 650px; position: absolute; top: 60px; ';
+		scene = new THREE.Scene();
+
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 5000 );
+		camera.position.set( -20, 10, 20);
+		controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+// Lights
+ 		light = new THREE.DirectionalLight( 0xffffff, 1 );
+		light.position.set( 0, 30, 0 );
+		light.castShadow = true;
+		light.shadowMapWidth = light.shadowMapHeight = 1024;
+
+		var d = 30;
+		light.shadowCameraLeft = -d;
+		light.shadowCameraRight = d;
+		light.shadowCameraTop = d;
+		light.shadowCameraBottom = -d;
+
+		light.shadowCameraNear = 10;
+		light.shadowCameraFar = 50;
+//		light.shadowCameraVisible = true;
+		scene.add( light );
+
+		scene.add( new THREE.AxisHelper( 30 ) );
+
+// Ground
+		geometry = new THREE.PlaneBufferGeometry( 60, 60, 1, 1 );
+		geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+
+		material = new THREE.MeshBasicMaterial( {color: 0x888888 } );
+		mesh = new THREE.Mesh( geometry, material );
+		mesh.position.set( 0, -10, 0 );
+		mesh.receiveShadow = true;
+		scene.add( mesh );
+
+		aircrafts = requestFile( '../../fgx-aircraft/data/aircraft.csv' );
+		aircrafts = aircrafts.split(/\r\n|\n/);
+// console.log( aircrafts );
+
+		loader = new THREE.JSONLoader();
+
+		index = Math.floor ( Math.random() * aircrafts.length );
+
+		loadAircraft( index );
+
+		window.addEventListener( 'resize', onWindowResize, false );
+
+	}
+
+	function loadAircraft( id ) {
+
+		var aircraftData = '../../fgx-aircraft/data/' + aircrafts[ id ];
+
+		index = id;
+		loader.load( aircraftData, function( geometry ) {
+			addAircraft( geometry, id );
+		});
+
+	}
+
+	function addAircraft( geometry, id ) {
+
+		if ( aircraft ) {
+			scene.remove( aircraft );
+		}
+
+		if ( bbox ) {
+			scene.remove( bbox );
+		}
+
+		material = new THREE.MeshNormalMaterial( { side: 2, shading: THREE.SmoothShading } );
+
+		aircraft = new THREE.Mesh( geometry, material );
+
+		verts1 = aircraft.geometry.vertices.length;
+		verts2 = aircraft.geometry.mergeVertices();
+		aircraft.geometry.computeFaceNormals();
+		aircraft.geometry.computeVertexNormals();
+//		aircraft.geometry.computeTangents();
+//		aircraft.geometry.computeMorphNormals();
+		aircraft.geometry.verticesNeedUpdate = true;
+
+		aircraft.receiveShadow = true;
+		aircraft.castShadow = true;
+		scene.add( aircraft );
+
+		if ( inpBBox.checked === true ) {
+			bbox = new THREE.BoundingBoxHelper( aircraft, 0x333333 );
+			bbox.update();
+			scene.add( bbox );
+		}
+
+		aircraft.geometry.computeBoundingBox();
+
+		bboxData = aircraft.geometry.boundingBox;
+ 
+console.log( bboxData );
+
+		msg.innerHTML = 'Loaded:<br>' + ( data[ id ][ 1 ] ) + '<br>' + id +  ' of ' + aircrafts.length + '<br>' +
+			'verts 1: ' + verts1 + '<br>verts 2: ' + verts2 + '<br>' +
+			'Bounding box:<br>' +
+			'x: ' + ( bboxData.max.x - bboxData.min.x ).toFixed( 3 ) + '<br>' +
+			'y: ' + ( bboxData.max.y - bboxData.min.y ).toFixed( 3 ) + '<br>' +
+			'z: ' + ( bboxData.max.z - bboxData.min.z ).toFixed( 3 ) + '<br>' +
+		'';
+	}
+
+	function exportAircraft() {
+
+		if ( !aircraft ) {
+
+			alert( 'Nothing selected...' );
+
+			return;
+
+		}
+
+		var output = aircraft.toJSON();
+		output = JSON.stringify( output, null, '\t' );
+		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+		var blob = new Blob( [ output ], { type: 'text/plain' } );
+
+		var a = document.createElement( 'a' );
+		a.href = window.URL.createObjectURL( blob );
+		var len = data[ index ][ 1 ].length
+		a.download = data[ index ][ 1 ].substr( 0, len - 3 ) + '.json';
+		a.click();
+		delete a;
+
+	}
+
+	function openFileByFileDialog( fileObject ) {
+
+		if ( aircraft ) {
+			scene.remove( aircraft );
+		}
+
+		if ( bbox ) {
+			scene.remove( bbox );
+		}
+
+		var file = fileObject.files[ 0 ];
+
+		var reader = new FileReader();
+
+		reader.onload = function ( event ) {
+
+			var data = reader.result;
+
+			msg.innerHTML = 'name: ' + file.name + ' size: ' + file.size + 
+				' type: ' + file.type + ' modified: ' + file.lastModifiedDate +
+			'';
+
+//console.log( data );
+
+			data = JSON.parse( data );
+
+// Three.js JSON 4+ only
+
+			var loader = new THREE.ObjectLoader();
+
+			aircraft = loader.parse( data );
+
+		aircraft.receiveShadow = true;
+		aircraft.castShadow = true;
+			scene.add( aircraft );
+
+		};
+
+		if ( reader.readAsBinaryString !== undefined ) {
+
+			reader.readAsBinaryString( file );
+
+		} else {
+
+			reader.readAsArrayBuffer( file );
+
+		}
+
+	}
+
+	function onWindowResize() {
+		windowHalfX = window.innerWidth / 2;
+		windowHalfY = window.innerHeight / 2;
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+	}
+
+
+	function requestFile( fname ) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( 'GET', fname, false );
+		xmlHttp.send( null );
+		return xmlHttp.responseText;
+	}
+
+	function toggleInfo() {
+		// index= selAircraft.selectedIndex;
+		info.innerHTML = info.txt +
+			'<div onclick=info.innerHTML=info.txt; style=background-color:#ccc;opacity:0.7;padding:10px;text-align:left;width:50%; >' +
+			'FGx Aircreaft Viewer<br><br>' +
+			'<a href="https://github.com/fgx/fgx-aircraft/tree/gh-pages/" target="_blank">Source code at github/com/fgx.</a><br><br>' +
+			'<small>credits: <a href="http://threejs.org" target="_blank">three.js</a> - ' +
+			'<a href="http://khronos.org/webgl/" target="_blank">webgl</a> - ' +
+			'<a href="http://www.fgx.ch" target="_blank">FGx</a><br>' +
+			'copyright &copy; 2015 FGx authors ~ GPL 2.0 license</small><br><br>' +
+			'<i>Click anywhere in this message to hide...</i>' +
+		'</div>';
+		// selAircraft.selectedIndex = index;
+	}
+
+	function animate() {
+		requestAnimationFrame( animate );
+		controls.update();
+		renderer.render( scene, camera );
+		stats.update();
+	}
+
+</script>
+</body>
+</html>
