@@ -50,6 +50,12 @@ copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 Licens
 
 ## Change Log
 
+2015-01-07 ~ Theo
+
+* Force MeshNormalMaterial
+* Tighten spacing in menu
+* Change data file to aircraft.csv
+
 2015-01-06 ~ Theo
 
 * Update readme

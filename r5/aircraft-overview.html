@@ -32,7 +32,7 @@
 		document.body.style.cssText = ' font: bold 12pt monospace; margin: 0; overflow: hidden';
 
 		menuLeft = document.body.appendChild( document.createElement( 'div' ) );
-		menuLeft.style.cssText = 'background-color: #ccc; left: 20px; max-height: ' + ( window.innerHeight - 120 ) + 'px ;' +
+		menuLeft.style.cssText = 'background-color: #ccc; left: 20px; max-height: ' + ( window.innerHeight - 50 ) + 'px ;' +
 			'opacity: 0.9; overflow: auto; padding: 10px; position: absolute; resize: both; top: 20px; width: 220px; z-index: 20;' +
 		'';
 //		menuLeft.id = 'movable';
@@ -42,20 +42,24 @@
 //			'<h1><a id=closerIcon href=JavaScript:VH.toggleMenu(menuLeft); >&#9776;</a></h1>' +
 		'';
 
-		menuLeft.header += '<h1><a href="http://fgx.github.io">FGx</a> &raquo;<br>' +
-			'<a href="" >Aircraft<br>Overview</a><br>' +
-			'<a href=# onclick=toggleInfo() style=text-decoration:none; ><large>&#x24D8;</large></a></h1>' +
-			'<p><a href=aircraft-overview-splash.html >Splash Images</a></p>' +
-			'<p><input type=checkbox id=inpBBox checked />Display bounding box</p>' +
+		menuLeft.header += '<h1 style=margin:0; >' +
+				'<a href="http://fgx.github.io">FGx</a> &raquo;<br>' +
+				'<a href="" >Aircraft<br>Overview</a><br>' +
+//				'<a href=# onclick=toggleInfo() style=text-decoration:none; ><large>&#x24D8;</large></a>' +
+			'</h1>' +
+			'<p>' +
+				'<a href=aircraft-overview-splash.html >Splash Images</a><br>' +
+				'<input type=checkbox id=inpBBox checked />Display bounding box' +
+			'</p>' +
 			'<span id=msg></span>' +
-			'<p><input type=button onclick=exportAircraft() value="Export aircraft" /> ~ ' +
+			'<p><input type=button onclick=exportAircraft() value="Export aircraft" /> ' +
 			'<input type=file onchange=openFileByFileDialog(this) /></p>' +
 		'';
 
 //		var list = document.body.appendChild( document.createElement( 'div' ) );
 //		list.style.cssText = 'height: ' + (window.innerHeight - 60) + 'px; width: 600px; overflow: scroll;'
 
-		var response = requestFile( '../../fgx-aircraft/aircraft.txt' );
+		var response = requestFile( '../../fgx-aircraft/data/aircraft.csv' );
 		var lines = response.split(/\r\n|\n/);
 		var length = lines.length - 1;
 		data = [];
@@ -244,8 +248,11 @@ console.log( bboxData );
 
 			aircraft = loader.parse( data );
 
-		aircraft.receiveShadow = true;
-		aircraft.castShadow = true;
+		material = new THREE.MeshNormalMaterial();
+		aircraft = new THREE.Mesh( aircraft.geometry, material );
+
+			aircraft.receiveShadow = true;
+			aircraft.castShadow = true;
 			scene.add( aircraft );
 
 		};
