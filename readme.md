@@ -3,7 +3,7 @@
 
 [FGx Aircraft Overview (latest)]( http://fgx.github.io/fgx-aircraft-overview/latest/index.html )
 
-Cropped `iframe` view of the FGx Aircraft Loader app:		
+Cropped `iframe` view of the FGx Aircraft Loader app:
 <iframe src="latest/index.html" width=100% height=300px>
 There is an `iframe` here. It is not visible when viewed on github.com/fgx. To view, please go to fgx.github.io.
 </iframe>
@@ -49,6 +49,15 @@ Right Panel: Viewing panel with ability to zoom, pan and rotate aircraft. Link t
 copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
 
 ## Change Log
+
+2015-01-06 ~ Theo
+
+* Update readme
+* A near full re-write, but still a WIP
+* Merges duplicate vertices and displays before and after numbers
+* Allows you to save and open files in the new Three.js JSON 4+ format
+* Displays bounding box - which can be toggled
+* Display bounding box dimensions
 
 2015-01-05 ~ Theo
 
