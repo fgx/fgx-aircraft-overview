@@ -23,6 +23,7 @@ In the long term, it is hoped that future revisions of the models and their disp
 ## <a name="roadMap"></a>Road Map
 
 * Add up/down cursor key events to enable scrolling through the files
+* Add scroll to randomly selected item at app opening
 * Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
 	* Link to appropriate Wikipedia entry
