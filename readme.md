@@ -22,13 +22,14 @@ In the long term, it is hoped that future revisions of the models and their disp
 
 ## <a name="roadMap"></a>Road Map
 
-* Allows you to select aircraft by categories such as year built, country, manufacturer, type etc
+* Add up/down cursor key events to enable scrolling through the files
+* Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
 	* Link to appropriate Wikipedia entry
 	* Link to manufacturer's web page for the aircraft and/or other significant links
 	* Link to Google image search for the aircraft. Example [Avro Vulcan B2 images]( https://www.google.com/search?q=vulcan+b2&client=firefox-a&hs=Za6&rls=org.mozilla:en-US:official&channel=fflb&source=lnms&tbm=isch&sa=X&ei=KiKyUo65OPPO2QXf-4CoBA&ved=0CAkQ_AUoAQ&biw=1846&bih=929&dpr=1 )
 * Add 'Which plane is this?' game
-* Add notification of which aircraft is being viewed
+
 * Add slide-show replay capability
 * Add pre-loading of next file
 * Camera movement starts if no interaction for 20 seconds.
@@ -36,19 +37,30 @@ In the long term, it is hoped that future revisions of the models and their disp
 * Add skybox and globe or landscape	
 * Add zoom to fit extents
 
-### Technology
+<!--
 Two panel browser/viewer:
 
 Left panel: scrolling view with panel for each aircraft. Each panel has thumbnail plus links to relevant external web pages. 
 Perhaps there is a mouseover pop-up that display an infobox for each aircraft. The data for this panel is maintained in a CSV file
 
 Right Panel: Viewing panel with ability to zoom, pan and rotate aircraft. Link to current aircraft model obtained from CSV file
-
+-->
 
 ## Copyright and License
 copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
 
 ## Change Log
+
+2015-01-10 ~ Theo
+
+* Add added first pass at multiple ribbons menu idea
+	* both menus have title mars that allow for moving the menu
+	* both menus have independent smallifiers
+
+* Added view Readme where file is available
+* Added toggle display of images  
+* Add notification of which aircraft is being viewed << added a while ago
+
 
 2015-01-07 ~ Theo
 
