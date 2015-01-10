@@ -243,6 +243,8 @@
 		menu2.getElementsByClassName( 'movable' )[0].innerHTML = '<a href=JavaScript:VH.toggleMenu(menu2); >&#9776;</a>';
 		menu2.getElementsByClassName( 'inpDisplayImages' )[0].checked = displayImages;
 
+		menu2.scrollTop = horRule.offsetTop;
+
 	}
 
 	function loadAircraft( id ) {
@@ -319,7 +321,7 @@
 
 		}
 
-		menu2.scrollTop = horRule.offsetTop;
+
 
 	}
 
