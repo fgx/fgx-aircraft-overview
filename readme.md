@@ -22,8 +22,6 @@ In the long term, it is hoped that future revisions of the models and their disp
 
 ## <a name="roadMap"></a>Road Map
 
-* Add up/down cursor key events to enable scrolling through the files
-* Add scroll to randomly selected item at app opening
 * Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
 	* Link to appropriate Wikipedia entry
@@ -51,6 +49,14 @@ Right Panel: Viewing panel with ability to zoom, pan and rotate aircraft. Link t
 copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
 
 ## Change Log
+
+2015-01-11 ~ Theo
+
+* Add up/down cursor key events to enable scrolling through the files << Page Up  / Page Down
+* Split menus into two separate ribbons
+* Better handling of title bar, moving, iconifying
+* Add scroll to randomly selected item at app opening
+* some code clean-up
 
 2015-01-10 ~ Theo
 
