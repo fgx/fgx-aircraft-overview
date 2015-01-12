@@ -50,6 +50,15 @@ copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 Licens
 
 ## Change Log
 
+2015-01-12 ~ Theo
+
+* Add R8
+* Add compute vertex normals
+* Code clean-up
+* Fix display of read me files 
+* Add About notice
+* Simplify file loading process
+
 2015-01-11 ~ Theo
 
 * Add up/down cursor key events to enable scrolling through the files << Page Up  / Page Down
