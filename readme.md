@@ -22,7 +22,6 @@ In the long term, it is hoped that future revisions of the models and their disp
 
 ## Road Map
 
-
 * Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
 	* Link to appropriate Wikipedia entry
