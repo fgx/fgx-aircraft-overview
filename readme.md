@@ -20,7 +20,8 @@ You can have a very close look at the aircraft and click through the many curate
 
 In the long term, it is hoped that future revisions of the models and their display technology will be of sufficient quality and appropriately licensed so as to be included in the Wikipedia entry for each aircraft  
 
-## <a name="roadMap"></a>Road Map
+## Road Map
+
 
 * Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
@@ -36,19 +37,19 @@ In the long term, it is hoped that future revisions of the models and their disp
 * Add skybox and globe or landscape	
 * Add zoom to fit extents
 
-<!--
-Two panel browser/viewer:
-
-Left panel: scrolling view with panel for each aircraft. Each panel has thumbnail plus links to relevant external web pages. 
-Perhaps there is a mouseover pop-up that display an infobox for each aircraft. The data for this panel is maintained in a CSV file
-
-Right Panel: Viewing panel with ability to zoom, pan and rotate aircraft. Link to current aircraft model obtained from CSV file
--->
 
 ## Copyright and License
 copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 License](https://github.com/fgx/fgx-aircraft/blob/gh-pages/license.md)
 
 ## Change Log
+
+2015-01-13 ~ Theo
+
+* R8.1
+* Left menu many updates
+* Left menu shows details when file is loaded from disk
+* Right menu: current selection is highlighted. Previous selection is de-highlighted
+>> * Highlight currently selected aircraft with a color background
 
 2015-01-12 ~ Theo
 

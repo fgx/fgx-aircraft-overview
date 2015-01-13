@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>FGx Aircraft Overview R8</title>
+<title>FGx Aircraft Overview R8.1</title>
 <meta charset=utf-8 />
 <meta name=viewport content=width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0 />
 </head>
@@ -21,15 +21,19 @@
 
 	var info = '<div>' +
 		'<h2>About</h2>' +
+		'<small>' +
 		'<p>Source code at <a href="https://github.com/fgx/fgx-aircraft-overview/tree/gh-pages/" target="_blank">github/com/fgx</a></p>' +
-		'<p><small>credits:<br><a href="http://threejs.org" target="_blank">three.js</a> - ' +
+		'<p>Click \'Aircraft Overview\' to refresh.</p>' +
+		'<p>Page Up/Page Down to go to next aircraft.</p>' +
+		'<p>credits:<br><a href="http://threejs.org" target="_blank">three.js</a> - ' +
 		'<a href="http://khronos.org/webgl/" target="_blank">webgl</a> - ' +
 		'<a href="http://www.fgx.ch" target="_blank">FGx</a></p>' +
 		'<p>copyright &copy; 2015 FGx authors</p>' +
-		'<p>GPL 2.0 license</small></p><br>' +
+		'<p>GPL 2.0 license</p>' +
+		'</small><br>' +
 	'</div>';
 
-	var aircrafts, aircraft, index, boundingBox;
+	var aircrafts, aircraft, boundingBox, index, indexPrevious, fileLoaded;
 
 	var menu1, menu2;
 	var displayBBox = true;
@@ -103,9 +107,9 @@
 
 		loader = new THREE.JSONLoader();
 
-		index = Math.floor ( Math.random() * aircrafts.length );
+		indexPrevious = index = Math.floor ( Math.random() * aircrafts.length );
 
-		loadAircraft( index );
+		loadAircraft();
 
 		window.addEventListener( 'mouseup', mouseUp, false);
 
@@ -118,37 +122,10 @@
 		aircrafts = requestFile( '../../fgx-aircraft/data/aircraft.csv' );
 		aircrafts = aircrafts.split(/\r\n|\n/);
 
-		var catalog = '';
-
-		for ( var i = 0; i < aircrafts.length; i++ ) {
-
-			aircraftFile = aircrafts[ i ].split( '/' );
-
-// Ugly, but doesn't really seem to slow things down...
-
-			if ( displayImages === true ) {
-
-				images = '<p>' +
-					'<a href=# onclick="loadAircraft(' + i + ');" >' +
-					'<img src="../../fgx-aircraft/data/' + aircraftFile[0] + '/thumbnail.jpg" width=171></a>' +
-				'</p>';
-
-			} else {
-
-				images = '';
-
-			}
-
-			catalog += images + '<p id=ac' + i + ' >' +
-				'Folder: ' + aircraftFile[0] + '<br>File: <a href=# onclick="loadAircraft(' + i + ');" >' + aircraftFile[1] + '</a>' +
-			'</p>';
-
-		}
-
 		if ( !menu1 ) { menu1 = document.body.appendChild( document.createElement( 'div' ) ); }
 
 		menu1.style.cssText = 'background-color: #ccc; left: 10px; ' +
-			'opacity: 0.9; overflow: auto; padding: 0px; position: absolute; resize: both; top: 20px; width: 200px; ' +
+			'opacity: 0.9; overflow: auto; padding: 0px; position: absolute; resize: both; top: 20px; width: 210px; ' +
 		'';
 		menu1.innerHTML =
 			'<div class=movable >' +
@@ -161,57 +138,88 @@
 				'</h1>' +
 				'<p>' +
 					'<a href=aircraft-overview-splash.html >Splash Images</a><br>' +
-					'<input type=checkbox onchange=displayBBox=displayBBox===true?false:true; />Display bounding box' +
+					'<input type=checkbox id=chkBBox onchange=displayBBox=displayBBox===true?false:true; />Show bounding box<br>' +
+					'<input type=checkbox id=chkImages onchange=displayImages=displayImages===true?false:true;buildMenu(); />Show images' +
 				'</p>' +
 				'<p>' +
 					'<input type=button onclick=exportAircraft() value="Export aircraft" /> ' +
 					'<input type=file onchange=openFileByFileDialog(this) />' +
 				'</p>' +
-				'<p id=msg></p>' +
+				'<hr>' +
+				'<p id=msgInfo></p>' +
+				'<p id=msgBBox ></p>' +
+				'<hr>' +
 				'<div id=about ></div>'; +
 			'</div>' +
 		'';
-		content1.style.cssText = ' height: ' + ( 0.8 * window.innerHeight ) + 'px; margin-bottom: 10px; padding: 10px;';
-		about.innerHTML = info;
 		menu1.addEventListener( 'mousedown', mouseDown, false );
+
+		chkBBox.checked = displayBBox;
+		chkImages.checked = displayImages;
+		content1.style.cssText = ' height: ' + ( 0.8 * window.innerHeight ) + 'px; margin-bottom: 10px; overflow: auto; padding: 10px;';
+		about.innerHTML = info;
+
+		catalog = '';
+
+		for ( var i = 0; i < aircrafts.length; i++ ) {
+
+			aircraftFile = aircrafts[ i ].split( '/' );
+
+// Ugly, but doesn't really seem to slow things down...
+
+			if ( displayImages === true ) {
+
+				images = '<p>' +
+					'<a href=# onclick="index=' + i + ';loadAircraft();" >' +
+					'<img src="../../fgx-aircraft/data/' + aircraftFile[0] + '/thumbnail.jpg" width=171></a>' +
+				'</p>';
+
+			} else {
+
+				images = '';
+
+			}
+
+			catalog += images + '<p id=ac' + i + ' >' +
+				'Folder: ' + aircraftFile[0] + '<br>File: <a href=# onclick="index=' + i + ';loadAircraft();" >' + aircraftFile[1] + '</a>' +
+			'</p>';
+
+		}
 
 		if ( !menu2 ) { menu2 = document.body.appendChild( document.createElement( 'div' ) );  }
 
 		menu2.style.cssText = 'background-color: #ccc; left: 230px; ' +
 			'opacity: 0.9; overflow: auto; padding: 0px; position: absolute; resize: both; top: 20px; width: 200px; ' +
 		'';
-		menu2.header =
+		menu2.innerHTML =
 			'<div class=movable >' +
 				'<a href=JavaScript:toggleContent(content2); >&#9776;</a> ' +
 			'</div>' +
 			'<div id=content2 >' +
 				'<h1>Catalog</h1>' +
-				'<input type=checkbox class=inpDisplayImages onchange=displayImages=displayImages===true?false:true;buildMenu(); /> Display images';
+				'<p id=msgCatalog ></p>' +
 			'</div>' +
 		'';
 
-		menu2.innerHTML = menu2.header + catalog;
-		content2.style.cssText = ' height: ' + ( 0.8 * window.innerHeight ) + 'px; margin-bottom: 10px; padding: 10px;';
-		menu2.getElementsByClassName( 'inpDisplayImages' )[0].checked = displayImages;
+		msgCatalog.innerHTML = catalog;
+		content2.style.cssText = ' height: ' + ( 0.8 * window.innerHeight ) + 'px; margin-bottom: 10px; overflow: auto; padding: 10px;';
 		menu2.addEventListener( 'mousedown', mouseDown, false );
 
 	}
 
-	function loadAircraft( id ) {
+	function loadAircraft() {
 
-		var aircraftData = '../../fgx-aircraft/data/' + aircrafts[ id ];
-
-		index = id;
+		var aircraftData = '../../fgx-aircraft/data/' + aircrafts[ index ];
 
 		loader.load( aircraftData, function( geometry ) {
 
-			addAircraft( geometry, id );
+			addAircraft( geometry );
 
 		});
 
 	}
 
-	function addAircraft( geometry, id ) {
+	function addAircraft( geometry ) {
 
 		if ( aircraft ) {
 
@@ -254,28 +262,49 @@
 
 		bboxData = aircraft.geometry.boundingBox;
 
-		aircraftFile = aircrafts[id].split( '/' );
 
-		msg.innerHTML = 'Loaded:<br>' + ( aircraftFile[ 1 ] ) + '<br>' + id +  ' of ' + aircrafts.length + '<br>' +
-			'verts 1: ' + verts1 + '<br>verts 2: ' + verts2 + '<br>' +
-			'Bounding box:<br>' +
+		msgBBox.innerHTML = 'Bounding box:<br>' +
 			'x: ' + ( bboxData.max.x - bboxData.min.x ).toFixed( 3 ) + '<br>' +
 			'y: ' + ( bboxData.max.y - bboxData.min.y ).toFixed( 3 ) + '<br>' +
 			'z: ' + ( bboxData.max.z - bboxData.min.z ).toFixed( 3 ) + '<br>' +
+			'<br>' +
+			'Vertex merge:<br>' +
+			'Start: ' + verts1 + '<br>Merged: ' + verts2 + '<br>' +
 		'';
 
-		ac = document.getElementById( 'ac' + id );
-		ac.previousSibling.scrollIntoViewIfNeeded()
+		if ( index !== -1 ) {
 
-		file = '../../fgx-aircraft/data/' + aircraftFile[ 1 ] + '/Read-Me.txt' 
-		readme = requestFile( '../../fgx-aircraft/data/' + aircraftFile[ 0 ] + '/Read-Me.txt' );
+			aircraftFile = aircrafts[ index ].split( '/' );
 
-		readme = readme.replace( /\r\n|\n/gi, '<br>' );
+			msgInfo.innerHTML = 'Aircraft loaded:<br>' + ( aircraftFile[ 1 ] ) + '<br>#' + index +  ' of ' + aircrafts.length + '<br>' +
+			'';
+
+			ac = document.getElementById( 'ac' + indexPrevious );
+			ac.style.backgroundColor = '';
+			indexPrevious = index;
+
+			ac = document.getElementById( 'ac' + index );
+			ac.previousSibling.scrollIntoViewIfNeeded();
+			ac.style.backgroundColor = 'pink';
 
 
-		if ( readme ) {
+			file = '../../fgx-aircraft/data/' + aircraftFile[ 1 ] + '/Read-Me.txt' 
+			readme = requestFile( '../../fgx-aircraft/data/' + aircraftFile[ 0 ] + '/Read-Me.txt' );
 
-			msg.innerHTML += '<h2>Read Me</h2>' + readme;
+			readme = readme.replace( /\r\n|\n/gi, '<br>' );
+
+
+			if ( readme ) {
+
+				msgBBox.innerHTML += '<hr><h2>Read Me</h2>' + readme;
+
+			}
+
+		} else {
+
+			msgInfo.innerHTML = 'Aircraft loaded:<br>' + fileLoaded.name + '<br>File size: ' + fileLoaded.size + 
+				'<br>type: ' + fileLoaded.type + '<br>modified: ' + fileLoaded.lastModifiedDate +
+			'';
 
 		}
 
@@ -322,17 +351,13 @@
 
 		}
 
-		var file = fileObject.files[ 0 ];
+		fileLoaded = fileObject.files[ 0 ];
 
 		var reader = new FileReader();
 
 		reader.onload = function ( event ) {
 
 			var data = reader.result;
-
-			msg.innerHTML = 'name: ' + file.name + ' size: ' + file.size + 
-				' type: ' + file.type + ' modified: ' + file.lastModifiedDate +
-			'';
 
 			data = JSON.parse( data );
 
@@ -342,17 +367,19 @@
 
 			aircraft = loader.parse( data );
 
-			addAircraft( aircraft.geometry, 999 );
+			index = -1;
+
+			addAircraft( aircraft.geometry );
 
 		};
 
 		if ( reader.readAsBinaryString !== undefined ) {
 
-			reader.readAsBinaryString( file );
+			reader.readAsBinaryString( fileLoaded );
 
 		} else {
 
-			reader.readAsArrayBuffer( file );
+			reader.readAsArrayBuffer( fileLoaded );
 
 		}
 
