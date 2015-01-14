@@ -22,6 +22,10 @@ In the long term, it is hoped that future revisions of the models and their disp
 
 ## Road Map
 
+* Permalink capability
+	* select aircraft
+	* toggle bounding box and image display
+	* set color and background etc
 * Allow you to select aircraft by categories such as year built, country, manufacturer, type etc
 * For each aircraft
 	* Link to appropriate Wikipedia entry
