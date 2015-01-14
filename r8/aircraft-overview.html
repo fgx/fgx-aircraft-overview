@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>FGx Aircraft Overview R8.1</title>
+<title>FGx Aircraft Overview R8.2</title>
 <meta charset=utf-8 />
 <meta name=viewport content=width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0 />
 </head>
@@ -159,37 +159,34 @@
 		content1.style.cssText = ' height: ' + ( 0.8 * window.innerHeight ) + 'px; margin-bottom: 10px; overflow: auto; padding: 10px;';
 		about.innerHTML = info;
 
-		catalog = '';
+		var catalog = '';
 
 		for ( var i = 0; i < aircrafts.length; i++ ) {
 
 			aircraftFile = aircrafts[ i ].split( '/' );
 
-// Ugly, but doesn't really seem to slow things down...
-
 			if ( displayImages === true ) {
 
-				images = '<p>' +
+				images = '<div id=ac' + i + ' >' +
 					'<a href=# onclick="index=' + i + ';loadAircraft();" >' +
-					'<img src="../../fgx-aircraft/data/' + aircraftFile[0] + '/thumbnail.jpg" width=171></a>' +
-				'</p>';
+						'<img src="../../fgx-aircraft/data/' + aircraftFile[0] + '/thumbnail.jpg" width=171 style=margin-top:10px; >' +
+					'</a>' +
+					'<br>';
 
 			} else {
 
-				images = '';
+				images = '<div id=ac' + i + ' >';
 
 			}
 
-			catalog += images + '<p id=ac' + i + ' >' +
-				'Folder: ' + aircraftFile[0] + '<br>File: <a href=# onclick="index=' + i + ';loadAircraft();" >' + aircraftFile[1] + '</a>' +
-			'</p>';
+			catalog += images + '<a href=# onclick="index=' + i + ';loadAircraft();" >' + aircraftFile[1] + '</a>' + '</div>';
 
 		}
 
 		if ( !menu2 ) { menu2 = document.body.appendChild( document.createElement( 'div' ) );  }
 
 		menu2.style.cssText = 'background-color: #ccc; left: 230px; ' +
-			'opacity: 0.9; overflow: auto; padding: 0px; position: absolute; resize: both; top: 20px; width: 200px; ' +
+			'opacity: 0.9; overflow: auto; padding: 0px; position: absolute; resize: both; top: 20px; width: 210px; ' +
 		'';
 		menu2.innerHTML =
 			'<div class=movable >' +
@@ -261,7 +258,6 @@
 		aircraft.geometry.computeBoundingBox();
 
 		bboxData = aircraft.geometry.boundingBox;
-
 
 		msgBBox.innerHTML = 'Bounding box:<br>' +
 			'x: ' + ( bboxData.max.x - bboxData.min.x ).toFixed( 3 ) + '<br>' +
