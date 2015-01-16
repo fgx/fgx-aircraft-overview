@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>FGx Aircraft Overview R8.2</title>
+<title>FGx Aircraft Overview R8.3</title>
 <meta charset=utf-8 />
 <meta name=viewport content=width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0 />
 </head>
@@ -272,7 +272,7 @@
 
 			aircraftFile = aircrafts[ index ].split( '/' );
 
-			msgInfo.innerHTML = 'Aircraft loaded:<br>' + ( aircraftFile[ 1 ] ) + '<br>#' + index +  ' of ' + aircrafts.length + '<br>' +
+			msgInfo.innerHTML = 'Aircraft loaded:<br>' + ( aircraftFile[ 0 ] + '/' + aircraftFile[ 1 ] ) + '<br>#' + index +  ' of ' + aircrafts.length + '<br>' +
 			'';
 
 			ac = document.getElementById( 'ac' + indexPrevious );
