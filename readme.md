@@ -46,6 +46,15 @@ copyright &copy; 2015 FGx authors ~ All work herein is under the [GPL 2.0 Licens
 
 ## Change Log
 
+2015-02-21 ~ Theo
+
+* R10
+* Add xmlhttprequests callbacks
+* Update menus to be more mobile friendly/more compact
+* Code clean-up
+* Bounding box display toggle as you click
+
+
 2015-01-13 ~ Theo
 
 * R8.1
