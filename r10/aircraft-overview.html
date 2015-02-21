@@ -48,8 +48,6 @@
 
 	function init() {
 
-document.domain = 'github.io';
-
 		if ( !Detector.webgl ) {
 			renderer = new THREE.CanvasRenderer();
 		} else {
@@ -328,6 +326,12 @@ document.domain = 'github.io';
 
 			requestFile( '../../fgx-aircraft/data/' + aircraftFile[ 0 ] + '/Read-Me.txt', callbackReadMe );
 
+			if ( window.self === window.top ) {
+//				document.write('<h1>Not in an iframe</h1>');
+			} else {
+//				document.write('<h1>Inside an iframe</h1>');
+				parent.msg.innerHTML = msgInfo.innerHTML;
+			}
 
 		} else {
 
