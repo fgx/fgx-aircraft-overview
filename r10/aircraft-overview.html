@@ -48,6 +48,8 @@
 
 	function init() {
 
+document.domain = 'github.io';
+
 		if ( !Detector.webgl ) {
 			renderer = new THREE.CanvasRenderer();
 		} else {
