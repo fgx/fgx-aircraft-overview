@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>FGx Aircraft Overview R10.1</title>
+<title>FGx Aircraft Overview R10</title>
 <meta charset=utf-8 />
 <meta name=viewport content='width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0' />
 </head>
@@ -13,7 +13,7 @@
 <script>
 
 	var xmlHttp;
-	var header1;
+	var header1, menu1;
 
 	if ( !Detector.webgl ) { Detector.addGetWebGLMessage(); }
 
@@ -66,7 +66,7 @@
 		document.body.appendChild( stats.domElement );
 
 		renderer.setSize( window.innerWidth, window.innerHeight );
-		renderer.shadowMap.enabled = true;
+		renderer.shadowMapEnabled = true;
 		document.body.appendChild( renderer.domElement );
 		scene = new THREE.Scene();
 
@@ -78,17 +78,17 @@
  		light = new THREE.DirectionalLight( 0xffffff, 1 );
 		light.position.set( 0, 30, 0 );
 		light.castShadow = true;
-		light.shadow.mapSize.width = light.shadow.mapSize.height = 1024;
+		light.shadowMapWidth = light.shadowMapHeight = 1024;
 
 		var d = 30;
-		light.shadow.camera.left = -d;
-		light.shadow.camera.right = d;
-		light.shadow.camera.top = d;
-		light.shadow.camera.bottom = -d;
+		light.shadowCameraLeft = -d;
+		light.shadowCameraRight = d;
+		light.shadowCameraTop = d;
+		light.shadowCameraBottom = -d;
 
-		light.shadow.camera.near = 10;
-		light.shadow.camera.far = 50;
-
+		light.shadowCameraNear = 10;
+		light.shadowCameraFar = 50;
+//		light.shadowCameraVisible = true;
 		scene.add( light );
 
 		scene.add( new THREE.AxisHelper( 30 ) );
@@ -142,7 +142,7 @@
 			'<div id=content1 >' +
 				'<h1>' +
 					'<a href="http://fgx.github.io">FGx</a> &raquo;<br>' +
-					'<a href="" >Aircraft<br>Overview 10.1</a><br>' +
+					'<a href="" >Aircraft<br>Overview</a><br>' +
 				'</h1>' +
 				'<p>' +
 					'<a href=aircraft-overview-splash.html >Splash Images</a><br>' +
@@ -267,7 +267,7 @@
 
 		}
 
-		material = new THREE.MeshNormalMaterial( { side: 2 } );
+		material = new THREE.MeshNormalMaterial( { side: 2, shading: THREE.SmoothShading } );
 
 		aircraft = new THREE.Mesh( geometry, material );
 
